@@ -2,6 +2,7 @@ package com.devsuperior.dscatalog.entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Objects;
 
 @Entity
@@ -12,13 +13,15 @@ public class Category implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    private LocalDate created_At;
 
     public Category() {
     }
 
-    public Category(Long id, String name) {
+    public Category(Long id, String name, LocalDate created_At) {
         this.id = id;
         this.name = name;
+        this.created_At = created_At;
     }
 
     public Long getId() {
@@ -35,6 +38,13 @@ public class Category implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public LocalDate getCreated_At() {
+        return created_At;
+    }
+    public void setCreated_At(LocalDate created_At) {
+        this.created_At = created_At;
     }
 
     @Override
