@@ -29,8 +29,7 @@ public class CategoryResource {
 
     @GetMapping(value="/{id}")
     public ResponseEntity<CategoryDTO> findById(@PathVariable Long id){
-        return service.findbyId(id)
-                .map(ResponseEntity::ok)
-                .orElseThrow(NoSuchElementException::new);
+        CategoryDTO categoryDTO = service.findbyId(id);
+        return ResponseEntity.ok(categoryDTO);
     }
 }
