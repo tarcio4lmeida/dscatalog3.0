@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service // registra a classe como um COMPONENTE de injecao de dependencia
@@ -27,5 +28,12 @@ public class CategoryService {
                 .map(CategoryDTO::new)
                 .orElseThrow(() -> new EntityNotFoundException("Entity not found"));
     }
-
+    @Transactional
+    public CategoryDTO insert(CategoryDTO dto) {
+        Category entity = new Category();
+        entity.setName(dto.getName());
+        entity.setCreated_At(LocalDate.now());
+        entity = repository.save(entity);
+        return new CategoryDTO(entity);
+    }
 }
