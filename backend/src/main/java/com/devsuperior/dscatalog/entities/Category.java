@@ -59,7 +59,7 @@ public class Category implements Serializable {
 
     @PreUpdate
     public void preUpdated(){
-        this.createdAt = Instant.now();
+        this.updatedAt = Instant.now();
     }
 
     @Override

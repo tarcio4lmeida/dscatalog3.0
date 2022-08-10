@@ -8,11 +8,12 @@ import com.devsuperior.dto.CategoryDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
-import java.time.LocalDate;
 import java.util.List;
 
 @Service // registra a classe como um COMPONENTE de injecao de dependencia
@@ -22,10 +23,12 @@ public class CategoryService {
     private CategoryRepository repository;
 
     @Transactional(readOnly = true)
-    public List<CategoryDTO> findAll(){
-        List<Category> list = repository.findAll();
-        return list.stream().map(CategoryDTO::new).toList();
+    public Page<CategoryDTO> findAllPaged(PageRequest pageRequest){
+        return repository
+                .findAll(pageRequest)
+                .map(CategoryDTO::new);
     }
+
     @Transactional(readOnly = true)
     public CategoryDTO findbyId(Long id){
         return repository.findById(id)
