@@ -24,6 +24,9 @@ public class ProductService {
     @Autowired
     private ProductRepository repository;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
     @Transactional(readOnly = true)
     public Page<ProductDTO> findAllPaged(PageRequest pageRequest){
         return repository
@@ -40,16 +43,17 @@ public class ProductService {
     @Transactional
     public ProductDTO insert(ProductDTO dto) {
         Product entity = new Product();
-        entity.setName(dto.getName());
+        copyDtoToEntity(dto, entity);
         entity = repository.save(entity);
-        return new ProductDTO(entity);
+        return new ProductDTO(entity, entity.getCategories());
     }
+
 
     @Transactional
     public ProductDTO update(Long id, ProductDTO dto) {
         try {
             Product product = repository.getOne(id);//atualizar sem precisar ir ao banco 2x
-            product.setName(dto.getName());
+            copyDtoToEntity(dto, product);
             product = repository.save(product);
             return new ProductDTO(product);
         } catch (EntityNotFoundException e) {
@@ -67,5 +71,19 @@ public class ProductService {
             throw new DatabaseException("Integrity Violation");
         }
 
+    }
+
+    private void copyDtoToEntity(ProductDTO dto, Product entity) {
+        entity.setName(dto.getName());
+        entity.setDescription(dto.getDescription());
+        entity.setPrice(dto.getPrice());
+        entity.setDate(dto.getDate());
+        entity.setImgUrl(dto.getImgUrl());
+
+        entity.getCategories().clear();
+       for (CategoryDTO categoryDTO : dto.getCategories()){
+           Category category = categoryRepository.getOne(categoryDTO.getId());
+           entity.getCategories().add(category);
+       }
     }
 }
