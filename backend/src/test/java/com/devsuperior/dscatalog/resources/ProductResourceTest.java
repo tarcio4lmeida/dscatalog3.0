@@ -46,7 +46,7 @@ public class ProductResourceTest {
     private long dependentId;
     private ProductDTO productDTO;
 
-    String jsonBody;
+    private String jsonBody;
     @Autowired
     private ObjectMapper objectMapper;
 
