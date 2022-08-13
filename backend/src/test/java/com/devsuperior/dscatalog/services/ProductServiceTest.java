@@ -5,6 +5,7 @@ import com.devsuperior.dscatalog.factory.Factory;
 import com.devsuperior.dscatalog.repositories.ProductRepository;
 import com.devsuperior.dscatalog.services.exceptions.DatabaseException;
 import com.devsuperior.dscatalog.services.exceptions.ResourcesNotFoundException;
+import com.devsuperior.dto.ProductDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,12 +15,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.util.List;
@@ -78,5 +80,14 @@ public class ProductServiceTest {
         });
 
         verify(repository, times(1)).deleteById(dependentId);
+    }
+
+    @Test
+    public void findAllPagedShouldReturnPage() {
+        Page<ProductDTO> result = service.findAllPaged((Pageable) any());
+
+        assertNotNull(result);
+
+        verify(repository, times(1)).findAll((Pageable) any());
     }
 }
