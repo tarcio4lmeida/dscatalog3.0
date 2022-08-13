@@ -43,7 +43,7 @@ public class ProductRepositoryTest {
     public void deleteShouldDeleteObjectWhenIdsExists() {
         repository.deleteById(existingId);
 
-        Optional<Product> result = repository.findById(existingId);
+        Optional<Product> result = repository.findById(noExistingId);
         assertFalse(result.isPresent());
     }
 
@@ -52,5 +52,18 @@ public class ProductRepositoryTest {
         assertThrows(EmptyResultDataAccessException.class, () -> {
             repository.deleteById(noExistingId);
         });
+    }
+
+    @Test
+    public void findByIdShouldRetrieveObjectWhenIdsExists() {
+        Optional<Product> result = repository.findById(existingId);
+        assertTrue(result.isPresent());
+    }
+
+    @Test
+    public void findByIdShouldNotRetrieveObjectWhenIdDoesntExists() {
+
+        Optional<Product> result = repository.findById(noExistingId);
+        assertFalse(result.isPresent());
     }
 }
