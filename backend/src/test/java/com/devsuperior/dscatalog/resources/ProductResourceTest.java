@@ -2,6 +2,7 @@ package com.devsuperior.dscatalog.resources;
 
 import com.devsuperior.dscatalog.factory.Factory;
 import com.devsuperior.dscatalog.services.ProductService;
+import com.devsuperior.dscatalog.services.exceptions.ResourcesNotFoundException;
 import com.devsuperior.dto.ProductDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,6 +24,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(ProductResource.class) // carrega o contexto porém somente da camanda web
@@ -39,12 +41,20 @@ public class ProductResourceTest {
     @InjectMocks
     private ProductResource resource;
 
+    private long existingId;
+    private long noExistingId;
+
     @BeforeEach
     void setUp() throws Exception {
         ProductDTO productDTO = Factory.createProductDTO();
         page = new PageImpl<>(List.of(productDTO));
+        existingId = 1L;
+        noExistingId = 100L;
+
 
         when(service.findAllPaged((Pageable) any())).thenReturn(page);
+        when(service.findbyId(existingId)).thenReturn(productDTO);
+        when(service.findbyId(noExistingId)).thenThrow(ResourcesNotFoundException.class);
 
     }
 
@@ -55,5 +65,26 @@ public class ProductResourceTest {
                         .accept(MediaType.APPLICATION_JSON));
 
         result.andExpect(status().isOk());
+    }
+
+    @Test
+    public void findByIdShouldReturnProductDTO() throws Exception {
+        ResultActions result =
+                mockMvc.perform(MockMvcRequestBuilders.get("/products/{id}", existingId)
+                        .accept(MediaType.APPLICATION_JSON));
+
+        result.andExpect(status().isOk());
+        result.andExpect(jsonPath("$.id").exists());
+        result.andExpect(jsonPath("$.name").exists());
+        result.andExpect(jsonPath("$.description").exists());
+    }
+
+    @Test
+    public void findByIdShouldReturnNotFoundWhenIdDoesNotExists() throws Exception {
+        ResultActions result =
+                mockMvc.perform(MockMvcRequestBuilders.get("/products/{id}", noExistingId)
+                        .accept(MediaType.APPLICATION_JSON));
+
+        result.andExpect(status().isNotFound());
     }
 }
