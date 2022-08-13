@@ -1,6 +1,7 @@
 package com.devsuperior.dscatalog.repositories;
 
 import com.devsuperior.dscatalog.entities.Product;
+import com.devsuperior.dscatalog.factory.Factory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +10,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest // -> Carrega somente os componentes relacionados ao Spring Data JPA.
 public class ProductRepositoryTest {
@@ -20,15 +20,27 @@ public class ProductRepositoryTest {
 
     private long existingId;
     private long noExistingId;
+    private long countTotalProducts;
 
     @BeforeEach
-    void setUp() throws Exception{
-         existingId = 1L;
-         noExistingId = 1000L;
+    void setUp() throws Exception {
+        existingId = 1L;
+        noExistingId = 1000L;
+        countTotalProducts = 25L;
     }
 
     @Test
-    public void deleteShouldDeleteObjectWhenIdsExists(){
+    public void saveShouldPersistObjectWhenIdsNull() {
+        Product product = Factory.createProduct();
+        product.setId(null);
+
+        product = repository.save(product);
+        assertNotNull(product.getId());
+        assertEquals(countTotalProducts+1, product.getId());
+    }
+
+    @Test
+    public void deleteShouldDeleteObjectWhenIdsExists() {
         repository.deleteById(existingId);
 
         Optional<Product> result = repository.findById(existingId);
@@ -36,8 +48,8 @@ public class ProductRepositoryTest {
     }
 
     @Test
-    public void deleteShouldThrowEmptyResultDataAccessExceptionWhenIdDoesNotExist(){
-        assertThrows(EmptyResultDataAccessException. class, () ->{
+    public void deleteShouldThrowEmptyResultDataAccessExceptionWhenIdDoesNotExist() {
+        assertThrows(EmptyResultDataAccessException.class, () -> {
             repository.deleteById(noExistingId);
         });
     }
