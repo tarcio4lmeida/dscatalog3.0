@@ -99,6 +99,7 @@ public class ProductServiceItTest {
         assertEquals("PC Gamer", result.getContent().get(1).getName());
         assertEquals("PC Gamer Alfa", result.getContent().get(2).getName());
     }
+
     @Test
     public void findByIdShouldReturnAProductDTOWhenIdExists() {
         ProductDTO productDTO = service.findbyId(existingId);
