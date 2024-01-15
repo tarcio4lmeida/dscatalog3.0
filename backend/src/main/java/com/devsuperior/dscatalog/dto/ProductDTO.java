@@ -1,4 +1,4 @@
-package com.devsuperior.dto;
+package com.devsuperior.dscatalog.dto;
 
 import com.devsuperior.dscatalog.entities.Category;
 import com.devsuperior.dscatalog.entities.Product;
@@ -8,8 +8,6 @@ import java.io.Serializable;
 import java.time.Instant;
 import java.util.*;
 
-@Entity
-@Table(name = "tb_product")
 public class ProductDTO implements Serializable {
     // Serializable -> converter o objeto em bytes para poder trafegar na rede
     private static final long serialVersionUID = 1L;

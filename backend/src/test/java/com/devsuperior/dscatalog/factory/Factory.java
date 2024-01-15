@@ -2,7 +2,7 @@ package com.devsuperior.dscatalog.factory;
 
 import com.devsuperior.dscatalog.entities.Category;
 import com.devsuperior.dscatalog.entities.Product;
-import com.devsuperior.dto.ProductDTO;
+import com.devsuperior.dscatalog.dto.ProductDTO;
 
 import java.time.Instant;
 
