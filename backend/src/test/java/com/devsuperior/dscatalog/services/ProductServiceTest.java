@@ -53,6 +53,7 @@ public class ProductServiceTest {
         page = new PageImpl<>(List.of(product));
         Category category = Factory.createCategory();
 
+        //quando o retorno não é void
         when(categoryRepository.getOne(2L)).thenReturn(category);
         when(repository.findById(existingId)).thenReturn(Optional.ofNullable(product));
         when(repository.findById(noExistingId)).thenReturn(Optional.empty());
@@ -60,8 +61,8 @@ public class ProductServiceTest {
         when(repository.save(any())).thenReturn(product);
         when(repository.findAll((Pageable) any())).thenReturn(page);
 
+        //quando o retorno é void
         doNothing().when(repository).deleteById(existingId);
-
         doThrow(EmptyResultDataAccessException.class).when(repository).deleteById(noExistingId);
         doThrow(DataIntegrityViolationException.class).when(repository).deleteById(dependentId);
         doThrow(ResourcesNotFoundException.class).when(repository).getOne(noExistingId);
