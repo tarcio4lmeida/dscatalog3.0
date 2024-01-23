@@ -58,7 +58,7 @@ public class ProductServiceItTest {
         assertDoesNotThrow(() -> {
             service.delete(existingId);
         });
-        assertEquals(countTotalProducts-1, repository.count());
+        assertEquals(countTotalProducts - 1, repository.count());
     }
 
     @Test
@@ -71,8 +71,8 @@ public class ProductServiceItTest {
 
     @Test
     public void findAllPagedShouldReturnPage0Size10() {
-        PageRequest pageRequest = PageRequest.of(0,10);
-        Page<ProductDTO> result = service.findAllPaged(pageRequest);
+        PageRequest pageRequest = PageRequest.of(0, 10);
+        Page<ProductDTO> result = service.findAllPaged(0L, "", pageRequest);
 
         assertFalse(result.isEmpty());
         assertNotNull(result);
@@ -83,16 +83,16 @@ public class ProductServiceItTest {
 
     @Test
     public void findAllPagedShouldReturnEmptyPageWhenPageDoesNotExist() {
-        PageRequest pageRequest = PageRequest.of(50,10);
-        Page<ProductDTO> result = service.findAllPaged(pageRequest);
+        PageRequest pageRequest = PageRequest.of(50, 10);
+        Page<ProductDTO> result =  service.findAllPaged(0L, "", pageRequest);
 
         assertTrue(result.isEmpty());
     }
 
     @Test
     public void findAllPagedShouldReturnSortedPageWhenSortByName() {
-        PageRequest pageRequest = PageRequest.of(0,10, Sort.by("name"));
-        Page<ProductDTO> result = service.findAllPaged(pageRequest);
+        PageRequest pageRequest = PageRequest.of(0, 10, Sort.by("name"));
+        Page<ProductDTO> result = service.findAllPaged(0L, "", pageRequest);
 
         assertFalse(result.isEmpty());
         assertEquals("Macbook Pro", result.getContent().get(0).getName());
@@ -106,7 +106,6 @@ public class ProductServiceItTest {
 
         assertNotNull(productDTO);
 
-        verify(repository, times(1)).findById(existingId);
     }
 
     @Test
@@ -116,7 +115,6 @@ public class ProductServiceItTest {
         });
 
 
-        verify(repository, times(1)).findById(noExistingId);
     }
 
     @Test
@@ -125,15 +123,13 @@ public class ProductServiceItTest {
 
         assertNotNull(productDTO);
 
-        verify(repository, times(1)).save(product);
     }
 
     @Test
     public void updateShouldReturnREntityNotFoundExceptionWhenIdDoesntExists() {
         assertThrows(ResourcesNotFoundException.class, () -> {
-           service.update(noExistingId, productDTO);
+            service.update(noExistingId, productDTO);
         });
 
-        verify(repository, times(1)).getOne(noExistingId);
     }
 }

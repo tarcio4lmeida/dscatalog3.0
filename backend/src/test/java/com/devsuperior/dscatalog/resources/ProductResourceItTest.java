@@ -2,6 +2,7 @@ package com.devsuperior.dscatalog.resources;
 
 import com.devsuperior.dscatalog.factory.Factory;
 import com.devsuperior.dscatalog.dto.ProductDTO;
+import com.devsuperior.dscatalog.factory.TokenUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,12 +34,18 @@ public class ProductResourceItTest {
     private ObjectMapper objectMapper;
     private long countTotalProdutcs;
 
+    @Autowired
+    private TokenUtil tokenUtil;
+
+    private String accessToken = "";
     @BeforeEach
     void setUp() throws Exception {
         existingId = 1L;
         noExistingId = 100L;
         dependentId = 4L;
         countTotalProdutcs = 25L;
+
+        accessToken = tokenUtil.obtainAccessToken(mockMvc, "maria@gmail.com", "123456");
     }
 
     @Test
@@ -64,6 +71,7 @@ public class ProductResourceItTest {
 
         ResultActions result =
                 mockMvc.perform(MockMvcRequestBuilders.put("/products/{id}", existingId)
+                        .header("Authorization", "Bearer " + accessToken)
                         .content(jsonBody)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON));
@@ -82,6 +90,7 @@ public class ProductResourceItTest {
 
         ResultActions result =
                 mockMvc.perform(MockMvcRequestBuilders.put("/products/{id}", noExistingId)
+                        .header("Authorization", "Bearer " + accessToken)
                         .content(jsonBody)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON));

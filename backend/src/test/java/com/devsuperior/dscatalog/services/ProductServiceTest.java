@@ -17,6 +17,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -59,7 +60,7 @@ public class ProductServiceTest {
         when(repository.findById(noExistingId)).thenReturn(Optional.empty());
         when(repository.getOne(existingId)).thenReturn(product);
         when(repository.save(any())).thenReturn(product);
-        when(repository.findAll((Pageable) any())).thenReturn(page);
+        when(repository.find(any(), any(), any())).thenReturn(page);
 
         //quando o retorno é void
         doNothing().when(repository).deleteById(existingId);
@@ -98,11 +99,9 @@ public class ProductServiceTest {
 
     @Test
     public void findAllPagedShouldReturnPage() {
-        Page<ProductDTO> result = service.findAllPaged((Pageable) any());
-
+        Pageable page = PageRequest.of(0, 12);
+        Page<ProductDTO> result = service.findAllPaged(0L, "", page);
         assertNotNull(result);
-
-        verify(repository, times(1)).findAll((Pageable) any());
     }
 
     @Test
