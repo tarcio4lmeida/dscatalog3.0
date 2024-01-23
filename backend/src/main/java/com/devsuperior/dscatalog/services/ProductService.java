@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.Arrays;
+import java.util.List;
 
 @Service // registra a classe como um COMPONENTE de injecao de dependencia
 public class ProductService {
@@ -28,18 +30,20 @@ public class ProductService {
     private CategoryRepository categoryRepository;
 
     @Transactional(readOnly = true)
-    public Page<ProductDTO> findAllPaged(Pageable pageable){
-        return repository
-                .findAll(pageable)
-                .map(ProductDTO::new);
+    public Page<ProductDTO> findAllPaged(Long categoryId, String name, Pageable pageable) {
+        List<Category> categories = (categoryId == 0) ? null : List.of(categoryRepository.getOne(categoryId));
+        Page<Product> page = repository.find(categories, name, pageable);
+        repository.findProductsWithCategories(page.getContent());
+        return page.map(x -> new ProductDTO(x, x.getCategories()));
     }
 
     @Transactional(readOnly = true)
-    public ProductDTO findbyId(Long id){
+    public ProductDTO findbyId(Long id) {
         return repository.findById(id)
                 .map(product -> new ProductDTO(product, product.getCategories()))
                 .orElseThrow(() -> new ResourcesNotFoundException("Entity not found"));
     }
+
     @Transactional
     public ProductDTO insert(ProductDTO dto) {
         Product entity = new Product();
@@ -65,8 +69,7 @@ public class ProductService {
             repository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
             throw new ResourcesNotFoundException("Id not found " + id);
-        }
-        catch (DataIntegrityViolationException e) {
+        } catch (DataIntegrityViolationException e) {
             throw new DatabaseException("Integrity Violation");
         }
 
@@ -80,9 +83,12 @@ public class ProductService {
         entity.setImgUrl(dto.getImgUrl());
 
         entity.getCategories().clear();
-       for (CategoryDTO categoryDTO : dto.getCategories()){
-           Category category = categoryRepository.getOne(categoryDTO.getId());
-           entity.getCategories().add(category);
-       }
+        for (CategoryDTO categoryDTO : dto.getCategories()) {
+            Category category = categoryRepository.getOne(categoryDTO.getId());
+            entity.getCategories().add(category);
+        }
+        dto.getCategories().stream()
+                .map(categoryDTO -> categoryRepository.getOne(categoryDTO.getId()))
+                .forEach(entity.getCategories()::add);
     }
 }
