@@ -1,13 +1,9 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './App';
+import './App.css';
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
-
+function App() {
+  return (
+   <h1>Hello Dscatalog</h1>
+  );
+}
 
 export default App;
