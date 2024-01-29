@@ -1,9 +1,10 @@
-import './assets/styles/custom.scss'
-import './App.css';
+import Home from 'assets/Home';
+import './assets/styles/custom.scss';
+import './App.css'; 
 
-function App() {
+const App = () => {
   return (
-   <h1>Hello Dscatalog</h1>
+   <Home/>
   );
 }
 
