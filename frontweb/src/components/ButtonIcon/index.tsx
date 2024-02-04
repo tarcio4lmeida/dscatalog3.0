@@ -1,16 +1,24 @@
 import './styles.css';
 import { ReactComponent as ArrowIcon } from 'assets/images/arrow.svg';
-const ButtonIcon = () => {
+import { NavLink } from 'react-router-dom';
+
+type Props = {
+  text: string;
+};
+
+const ButtonIcon = ({ text }: Props) => {
   return (
     <div className="btn-container">
       <div className="btn-container button">
         <button className="btn btn-primary">
-          <h6>INICIE AGORA A SUA BUSCA</h6>
+          <h6>{text}</h6>
         </button>
       </div>
-      <div className="btn-icon-container">
-        <ArrowIcon />
-      </div>
+      <NavLink to="/products">
+        <div className="btn-icon-container">
+          <ArrowIcon />
+        </div>
+      </NavLink>
     </div>
   );
 };
