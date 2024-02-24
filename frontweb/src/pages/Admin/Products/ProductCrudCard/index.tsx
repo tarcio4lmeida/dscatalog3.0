@@ -65,7 +65,6 @@ const ProductCrudCard = ({ product, onDelete }: Props) => {
             isOpen={isModalOpen}
             onClose={handleCloseModal}
             onConfirm={handleConfirmDelete}
-            product={product}
           />
           <div className="product-crud-card-top-container">
             <img src={product.imgUrl} alt={product.name} />

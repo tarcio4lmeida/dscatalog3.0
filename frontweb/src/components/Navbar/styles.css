@@ -57,4 +57,16 @@
     display: unset;
     margin-right: 20px;
   }
+
+  .user-avatar-container {
+    width: 40px; /* Defina a largura e altura desejadas para o contêiner da imagem */
+    height: 40px;
+    border-radius: 50%; /* Aplica o formato circular */
+    overflow: hidden; /* Garante que a imagem não ultrapasse os limites do contêiner */
+  }
+  
+  .user-avatar {
+    width: 100%; /* Garante que a imagem preencha todo o contêiner */
+    height: auto;
+  }
 }
