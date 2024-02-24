@@ -10,6 +10,7 @@ import { Product } from 'types/product';
 import { requestBackend } from 'util/requests';
 import { toast } from 'react-toastify';
 
+
 import './styles.css';
 
 type UrlParams = {

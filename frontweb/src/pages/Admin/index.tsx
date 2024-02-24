@@ -5,6 +5,7 @@ import PrivateRoute from 'components/PrivateRoute';
 import Products from './Products';
 
 import './styles.css';
+import Categories from './Categories';
 
 const Admin = () => {
   return (
@@ -16,7 +17,7 @@ const Admin = () => {
             <Products />
           </PrivateRoute>
           <PrivateRoute path="/admin/categories">
-            <h1>Category CRUD</h1>
+            <Categories/>
           </PrivateRoute>
           <PrivateRoute path="/admin/users" roles={['ROLE_ADMIN']}>
             <Users />

@@ -1,0 +1,54 @@
+/* Estilo para o fundo escuro semitransparente do modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Cor de fundo semitransparente */
+  z-index: 1000; /* Coloca o overlay sobre todos os outros elementos */
+}
+
+/* Estilo para o modal de confirmação de exclusão */
+.modal-container-products{
+  position: fixed;
+  top: 50%; /* Centraliza verticalmente */
+  left: 50%; /* Centraliza horizontalmente */
+  transform: translate(-50%, -50%); /* Move o modal para o centro */
+  background-color: white;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Sombra para destacar o modal */
+  z-index: 1000; /* Coloca o modal sobre o overlay */
+}
+
+.modal h2 {
+  margin-top: 0;
+}
+
+.modal p {
+  margin-bottom: 20px;
+}
+
+/* Estilo para os botões no modal */
+.modal-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.modal-buttons button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.modal-buttons button:first-child {
+  background-color: #dc3545; /* Cor de fundo vermelha para o botão "Sim" */
+  color: white;
+}
+
+.modal-buttons button:last-child {
+  background-color: #6c757d; /* Cor de fundo cinza para o botão "Cancelar" */
+  color: white;
+}

@@ -9,6 +9,9 @@ import ProductInfoLoader from './ProductInfoLoader';
 import ProductDetailsLoader from './ProductDetailsLoader';
 
 import './styles.css';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css'
+
 
 type UrlParams = {
   productId: string;
@@ -44,7 +47,8 @@ const ProductDetails = () => {
         <div className="row">
           <div className="col-xl-6">
             {isLoading ? (
-              <ProductInfoLoader />
+             <Skeleton count={5} /> // Five-line loading skeleton
+
             ) : (
               <>
                 <div className="img-container">
@@ -59,8 +63,9 @@ const ProductDetails = () => {
           </div>
           <div className="col-xl-6">
             {isLoading ? (
-              <ProductDetailsLoader />
-            ) : (
+              <Skeleton count={5} /> // Five-line loading skeleton
+
+              ) : (
               <div className="description-container">
                 <h2>Descrição do produto</h2>
                 <p>{product?.description}</p>

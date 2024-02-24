@@ -12,8 +12,8 @@
   color: #263238;
 }
 
-@media (min-width: 576px) {
+@media (min-width: 992px) {
   .catalog-container {
-    font-size: 30px;
+    height: 322px;
   }
 }
